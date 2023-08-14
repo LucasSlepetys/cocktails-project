@@ -11,6 +11,16 @@ import {
   Newsletter,
   SinglePageError,
 } from './pages';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   //Each router is a dictionary
@@ -27,12 +37,13 @@ const router = createBrowserRouter([
         index: true,
         element: <Landing />,
         errorElement: <SinglePageError />,
-        loader: landingLoader,
+        //(queryClient) now involques the function
+        loader: landingLoader(queryClient),
       },
       {
         path: 'cocktail/:id',
         errorElement: <SinglePageError />,
-        loader: singleCocktailLoader,
+        loader: singleCocktailLoader(queryClient),
         element: <Cocktail />,
       },
       {
@@ -49,6 +60,11 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />;
+      <ReactQueryDevtools initialIsOpen={true} />
+    </QueryClientProvider>
+  );
 };
 export default App;

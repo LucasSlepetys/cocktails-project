@@ -1089,7 +1089,7 @@ import { redirect } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export const action = async ({ request }) => {
-  const = await request.formData();
+  const ©= = await request.formData();
   const data = Object.fromEntries(formData);
   try {
     const response = await axios.post(newsletterUrl, data);
